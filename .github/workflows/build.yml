@@ -1,0 +1,45 @@
+name: build
+
+# Rebuilds myblock.txt whenever rules change, so an edit made anywhere
+# (phone, GitHub web editor, laptop) is published without a local build step.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # PRs: only verify. Rule errors fail the check.
+      - name: Lint and verify (pull request)
+        if: github.event_name == 'pull_request'
+        run: python3 scripts/build.py --check
+
+      # main: rebuild and commit myblock.txt if it changed.
+      - name: Build and publish (main)
+        if: github.event_name != 'pull_request'
+        run: |
+          python3 scripts/build.py
+          if git diff --quiet -- myblock.txt; then
+            echo "myblock.txt already up to date"
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898333+github-actions[bot]@users.noreply.github.com"
+          git add myblock.txt
+          git commit -m "Rebuild myblock.txt"
+          git push

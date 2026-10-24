@@ -1,0 +1,6 @@
+#!/bin/sh
+# Rebuild myblock.txt on every commit so the published list never drifts from rules/.
+# Install once:  ln -sf ../../scripts/pre-commit .git/hooks/pre-commit
+set -e
+python3 scripts/build.py
+git add myblock.txt

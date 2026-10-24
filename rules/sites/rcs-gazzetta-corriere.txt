@@ -1,0 +1,19 @@
+! Sites: gazzetta.it, corriere.it
+! Problem: RCS anti-adblock modal and Google Funding Choices "ad-block recovery" wall
+! Added: 2026-10 (migrated from list v3)
+! Notes: block 2 uses an ABP snippet; Vivaldi needs "Allow List to Use ABP Snippet Rules"
+!        ticked for this list, otherwise blocks 1, 3 and 4 still apply.
+
+! 1) RCS anti-adblock component (loader, lazy chunks, icon fonts), per-site CDN
+||components2.gazzettaobjects.it/rcs_anti-adblocker/
+||components2.corriereobjects.it/rcs_anti-adblocker/
+
+! 2) Snippet backup: abort the RcsAntiAdblocker library when it registers
+gazzetta.it,corriere.it#$#abort-on-property-write RcsAntiAdblocker
+
+! 3) Google Funding Choices ad-block recovery, these sites only
+||fundingchoicesmessages.google.com^$domain=gazzetta.it|corriere.it
+
+! 4) Cosmetic fallback for any leftover overlay
+gazzetta.it,corriere.it##[class*="anti-adblock"]
+gazzetta.it,corriere.it##[class*="rcs-adblock"]

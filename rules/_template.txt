@@ -1,0 +1,16 @@
+! Copy this file to rules/sites/<site-or-publisher>.txt (or rules/generic/<topic>.txt)
+! and fill in the header. Files starting with "_" are ignored by the build.
+!
+! Sites: example.com, example.org
+! Problem: what was broken or annoying (paywall nag, cookie wall, anti-adblock modal...)
+! Added: YYYY-MM
+! Notes: anything non-obvious (needs snippets enabled, rule found via DevTools > Network, etc.)
+
+! Network rules (block a request)
+! ||cdn.example.com/annoying-widget/
+
+! Cosmetic rules (hide an element) - always scope to the site
+! example.com##.newsletter-popup
+
+! Snippet rules (need "Allow List to Use ABP Snippet Rules" in Vivaldi)
+! example.com#$#abort-on-property-read SomeGlobal

@@ -1,0 +1,14 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if git rev-parse --abbrev-ref '@{u}' >/dev/null 2>&1; then git pull --ff-only --quiet || echo 'myblock: git pull failed - resolve before editing rules'; fi"
+          }
+        ]
+      }
+    ]
+  }
+}
