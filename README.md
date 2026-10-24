@@ -45,8 +45,8 @@ connected), the GitHub web editor, or the laptop.
 
    If a rule is invalid the Action fails and the published list stays unchanged.
 4. Vivaldi picks it up on its next refresh (it doesn't publish a schedule; users report every
-   couple of days). To get it immediately: Settings > Privacy > Manage Sources, untick and
-   re-tick the list. raw.githubusercontent.com may also serve the old file for ~5 minutes.
+   couple of days). To get it immediately: Settings > Privacy and Security > Tracker and Ad
+   Blocking > Manage Sources, untick and re-tick the list. raw.githubusercontent.com may also serve the old file for ~5 minutes.
 
 On the laptop, always `git pull --ff-only` before editing: the Action adds its own commits, so a
 stale checkout will conflict. The `.claude/settings.json` hook does this automatically for
