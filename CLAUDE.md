@@ -16,11 +16,13 @@ the rebuilt list.
 - Edit files in `rules/` only. Never edit `myblock.txt` by hand.
 - New site → new file `rules/sites/<site-or-publisher>.txt` copied from `rules/_template.txt`,
   with the `! Sites / Problem / Added / Notes` header filled in.
-- Run `python3 scripts/build.py`; it must succeed. Committing the rebuilt `myblock.txt` is fine
-  but optional: the GitHub Action rebuilds and commits it on every push to `main`.
+- Run `python3 scripts/build.py`; it must succeed. Commit the rebuilt `myblock.txt` together with
+  the rule change: the PR check (`build.py --check`) fails if it is stale.
 - Changes reach Vivaldi only once they are on `main`. Small, descriptive commit messages,
   e.g. "gazzetta: block new adblock CDN path".
 - Cloud sessions, and anyone without push access to `main`: push a branch and open a PR.
+  PRs from `claude/*` branches of this repo (not forks) are merged automatically once the check
+  passes. If the auto-merge fails (e.g. a conflict on `myblock.txt`), tell the user.
 
 ## Rule syntax
 - Vivaldi runs ABP network rules, element hiding (`##`) and ABP snippets (`#$#`, only when the

@@ -6,10 +6,13 @@ on:
   push:
     branches: [main]
   pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
   workflow_dispatch:
 
 permissions:
   contents: write
+  pull-requests: write
+  actions: write
 
 concurrency:
   group: build-${{ github.ref }}
@@ -28,6 +31,22 @@ jobs:
       - name: Lint and verify (pull request)
         if: github.event_name == 'pull_request'
         run: python3 scripts/build.py --check
+
+      # Auto-merge Claude Code cloud sessions' PRs: claude/* branches of this repo
+      # only, never forks, never drafts. Pushes made with GITHUB_TOKEN don't trigger
+      # workflows, so dispatch a main build to keep myblock.txt in sync after the merge.
+      - name: Auto-merge claude/* PR
+        if: >-
+          github.event_name == 'pull_request' &&
+          startsWith(github.head_ref, 'claude/') &&
+          github.event.pull_request.head.repo.full_name == github.repository &&
+          !github.event.pull_request.draft
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ github.event.pull_request.number }}
+        run: |
+          gh pr merge "$PR" --repo "$GITHUB_REPOSITORY" --squash --delete-branch
+          gh workflow run build.yml --repo "$GITHUB_REPOSITORY" --ref main
 
       # main: rebuild and commit myblock.txt if it changed.
       - name: Build and publish (main)

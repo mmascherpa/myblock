@@ -36,8 +36,14 @@ connected), the GitHub web editor, or the laptop.
    overlay to hide. On a phone, describe the symptom and the site to Claude.
 2. Add to the matching `rules/sites/<site>.txt`, or copy `rules/_template.txt` to a new file.
    Fill in the `! Sites / Problem / Added / Notes` header.
-3. Commit to `main`. The **build** GitHub Action lints the rules, rebuilds `myblock.txt` and
-   commits it. If a rule is invalid the Action fails and the published list stays unchanged.
+3. Commit to `main`, or open a pull request. The **build** GitHub Action lints the rules:
+   - Push to `main`: it rebuilds `myblock.txt` and commits it, so a local build is optional.
+   - Pull request: it only verifies, so commit the rebuilt `myblock.txt` (run
+     `python3 scripts/build.py`) with the rule change or the check fails. PRs from this repo's
+     `claude/*` branches (Claude Code cloud sessions) are merged automatically once the check
+     passes; PRs from forks always wait for a manual merge.
+
+   If a rule is invalid the Action fails and the published list stays unchanged.
 4. Vivaldi picks it up on its next refresh (it doesn't publish a schedule; users report every
    couple of days). To get it immediately: Settings > Privacy > Manage Sources, untick and
    re-tick the list. raw.githubusercontent.com may also serve the old file for ~5 minutes.
